@@ -261,6 +261,20 @@ HELP_TEXT = (
     "🔸 یک روز قبل از سانس، بات خودکار یادآوری می‌فرسته و افراد لیست اصلی رو منشن می‌کنه.\n"
 )
 
+# Descriptions shown in Telegram's "/" command menu (max 256 characters each).
+COMMAND_DESCRIPTIONS = {
+    "help": "راهنمای دستورات",
+    "newsession": "ساخت سانس جدید",
+    "cancelsession": "کنسل کردن سانس فعال (قبل از برگزاری)",
+    "endsession": "پایان دادن به سانس (بعد از برگزاری)",
+    "editsession": "ویرایش زمان، مکان یا ظرفیت سانس",
+    "setalias": "انتخاب لقب برای خودت",
+    "setuseralias": "تایید لقب برای یه نفر (ریپلای روی پیامش)",
+    "clearuseralias": "پاک کردن لقب تاییدشده (ریپلای روی پیامش)",
+    "addguest": "اضافه کردن دوستت به لیست سانس",
+    "removeguest": "حذف مهمون از لیست",
+}
+
 # Help-menu buttons: (label, callback_data).
 HELP_BUTTONS = [
     ("🔹 /newsession", "help:newsession"),

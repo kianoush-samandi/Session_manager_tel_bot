@@ -18,6 +18,7 @@ from telegram.ext import (
     filters,
 )
 
+import commands
 import handlers
 import jobs
 import state as bot_state
@@ -28,18 +29,10 @@ logger = logging.getLogger(__name__)
 # Only react to new messages: editing an old "/addguest ..." or "هستم" must not run it again.
 NEW_MESSAGES = filters.UpdateType.MESSAGE
 
-COMMANDS = {
-    "help": handlers.help_command,
-    "newsession": handlers.new_session,
-    "cancelsession": handlers.cancel_session,
-    "endsession": handlers.end_session,
-    "editsession": handlers.edit_session,
-    "setalias": handlers.set_alias,
-    "setuseralias": handlers.set_user_alias,
-    "clearuseralias": handlers.clear_user_alias,
-    "addguest": handlers.add_guest,
-    "removeguest": handlers.remove_guest,
-}
+
+async def on_startup(app: Application) -> None:
+    await restore_state(app)
+    await commands.publish_command_menu(app)
 
 
 async def restore_state(app: Application) -> None:
@@ -63,10 +56,10 @@ async def log_error(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 
 def build_application(token: str) -> Application:
-    app = ApplicationBuilder().token(token).post_init(restore_state).build()
+    app = ApplicationBuilder().token(token).post_init(on_startup).build()
 
-    for command, callback in COMMANDS.items():
-        app.add_handler(CommandHandler(command, callback, filters=NEW_MESSAGES))
+    for command in commands.COMMANDS:
+        app.add_handler(CommandHandler(command.name, command.callback, filters=NEW_MESSAGES))
     app.add_handler(CallbackQueryHandler(handlers.handle_help_callback))
     app.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, handlers.welcome_new_members))
     app.add_handler(MessageHandler(NEW_MESSAGES & filters.TEXT & ~filters.COMMAND, handlers.handle_text))

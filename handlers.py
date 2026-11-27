@@ -41,8 +41,13 @@ def admin_only(command: str):
                 await update.effective_message.reply_text(texts.ADMIN_ONLY[command])
                 return
             await handler(update, context)
+        wrapper.admin_only = True  # read by commands.py to build the admins' command menu
         return wrapper
     return decorator
+
+
+def is_admin_only(handler) -> bool:
+    return getattr(handler, "admin_only", False)
 
 
 def with_session(handler):
