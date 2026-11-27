@@ -1,0 +1,12 @@
+# Secrets
+token-file.txt
+
+# Local data
+bot_data.db
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
